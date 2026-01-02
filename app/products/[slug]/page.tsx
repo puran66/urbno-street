@@ -2,6 +2,8 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import StructuredData from '../../components/StructuredData';
 import { ProductDetailsData } from '../../components/ProductDetails';
+import { ReviewsData } from '../../components/ReviewsSummary';
+import { RelatedProduct } from '../../components/RelatedProducts';
 
 // Helper function to generate product data from slug
 function generateProductFromSlug(slug: string, id: string): ProductDetailsData {
@@ -283,12 +285,12 @@ export default async function ProductPage({ params }: { params: { slug: string }
     },
     aggregateRating: reviews.totalReviews > 0
       ? {
-          '@type': 'AggregateRating',
-          ratingValue: reviews.averageRating,
-          reviewCount: reviews.totalReviews,
-          bestRating: 5,
-          worstRating: 1,
-        }
+        '@type': 'AggregateRating',
+        ratingValue: reviews.averageRating,
+        reviewCount: reviews.totalReviews,
+        bestRating: 5,
+        worstRating: 1,
+      }
       : undefined,
   };
 
