@@ -220,19 +220,14 @@ function NavItem({
   isAccent?: boolean,
   className?: string
 }) {
+  const textColor = isActive
+    ? (isPrimary ? 'text-black font-semibold' : 'text-black')
+    : (isAccent ? 'text-gray-700 hover:text-urbno-accent' : 'text-gray-700 hover:text-black');
+
   return (
     <motion.button
       onClick={() => onNav(route)}
-      className={`relative uppercase text-sm tracking-wider font-inter transition-colors ${isActive
-          ? isPrimary
-            ? 'text-black font-semibold'
-            : isAccent 
-            'text-black'
-  'text-black' 
-        : isAccent
-  'text-gray-700 hover:text-urbno-accent'
-  'text-gray-700 hover:text-black'
-} ${ className } `}
+      className={`relative uppercase text-sm tracking-wider font-inter transition-colors ${textColor} ${className}`}
       whileHover={{ y: -1 }}
       whileTap={{ y: 0 }}
     >
@@ -240,9 +235,8 @@ function NavItem({
       {isActive && (
         <motion.div
           layoutId="activeNav"
-          className={`absolute bottom - 0 left - 0 right - 0 h - 0.5 ${
-  isPrimary ? 'bg-black' : isAccent ? 'bg-urbno-accent' : 'bg-black'
-} `}
+          className={`absolute bottom-0 left-0 right-0 h-0.5 ${isPrimary ? 'bg-black' : isAccent ? 'bg-urbno-accent' : 'bg-black'
+            }`}
           initial={false}
           transition={{
             type: "spring",
@@ -263,15 +257,17 @@ function NavItem({
   );
 }
 
-function Header({ 
-  onNav, 
-  cartCount, 
-  openAuth, 
+
+
+function Header({
+  onNav,
+  cartCount,
+  openAuth,
   currentRoute,
-  hasActiveOffers = true 
-}: { 
-  onNav: (route: string) => void, 
-  cartCount: number, 
+  hasActiveOffers = true
+}: {
+  onNav: (route: string) => void,
+  cartCount: number,
   openAuth: () => void,
   currentRoute: string,
   hasActiveOffers?: boolean
@@ -355,7 +351,7 @@ function Header({
             className="p-2 rounded-full hover:bg-gray-100"
             aria-label="search"
           >
-            <Icon name="search"/>
+            <Icon name="search" />
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.1 }}
@@ -364,7 +360,7 @@ function Header({
             aria-label="account"
             onClick={openAuth}
           >
-            <Icon name="user"/>
+            <Icon name="user" />
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -373,7 +369,7 @@ function Header({
             onClick={() => onNav('cart')}
             aria-label="cart"
           >
-            <Icon name="cart"/>
+            <Icon name="cart" />
             <span className="text-sm">Cart ({cartCount})</span>
             {cartCount > 0 && (
               <motion.span
@@ -455,7 +451,7 @@ function RippleButton({ children, onClick, className, ...props }: any) {
       onClick={handleClick}
       whileHover={{ scale: 0.98 }}
       whileTap={{ scale: 0.95 }}
-      className={`relative overflow - hidden ${ className } `}
+      className={`relative overflow-hidden ${className}`}
       {...props}
     >
       {children}
@@ -597,7 +593,7 @@ function HeroDark({ onBuy }: { onBuy: () => void }) {
               className="absolute -bottom-12 right-4 md:right-[-3.5rem] w-40 md:w-56 hidden md:block"
             >
               <motion.div
-                whileHover={{ scale: 1.05, shadow: '2xl' }}
+                whileHover={{ scale: 1.05 }}
                 className="rounded-2xl overflow-hidden shadow-2xl ring-1 ring-white/20 bg-white relative aspect-square"
               >
                 <SafeImage
@@ -624,16 +620,16 @@ function HeroDark({ onBuy }: { onBuy: () => void }) {
 }
 
 interface Product {
-    id: number;
-    title: string;
-    category: string;
-    price: number;
-    rating: string;
-    sketch: string;
-    photo: string;
-    size: string;
-    limited?: boolean;
-    slug?: string; // Optional slug for product pages
+  id: number;
+  title: string;
+  category: string;
+  price: number;
+  rating: string;
+  sketch: string;
+  photo: string;
+  size: string;
+  limited?: boolean;
+  slug?: string; // Optional slug for product pages
 }
 
 // Helper function to generate slug from title
@@ -655,7 +651,7 @@ function AnimatedSectionTitle({ children, className = "" }: { children: React.Re
       initial={{ opacity: 0, y: 20, letterSpacing: '-0.02em' }}
       animate={isInView ? { opacity: 1, y: 0, letterSpacing: '0.02em' } : {}}
       transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className={`font - archivo text - 3xl md: text - 4xl uppercase mb - 8 text - center md: text - left ${ className } `}
+      className={`font-archivo text-3xl md:text-4xl uppercase mb-8 text-center md:text-left ${className}`}
     >
       {children}
     </motion.h3>
@@ -686,10 +682,10 @@ function ProductCard({ product, index, onAdd }: { product: Product, index: numbe
     offset: ["start end", "end start"]
   });
   const y = useTransform(scrollYProgress, [0, 1], [0, -10]);
-  
+
   // Generate slug from title if not provided
   const productSlug = product.slug || generateSlug(product.title);
-  
+
   // Handle card click to navigate to product page
   const handleCardClick = (e: React.MouseEvent) => {
     // Don't navigate if clicking on the Add to Cart button
@@ -697,7 +693,7 @@ function ProductCard({ product, index, onAdd }: { product: Product, index: numbe
     if (target.closest('button')) {
       return;
     }
-    router.push(`/ products / ${ productSlug } `);
+    router.push(`/products/${productSlug}`);
   };
 
   return (
@@ -722,15 +718,15 @@ function ProductCard({ product, index, onAdd }: { product: Product, index: numbe
           transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
           className="relative w-full h-full"
         >
-          <SafeImage 
-            src={product.photo} 
-            alt={product.title || 'Product image'} 
-            className="object-cover" 
+          <SafeImage
+            src={product.photo}
+            alt={product.title || 'Product image'}
+            className="object-cover"
             fill
             placeholderSrc=""
           />
         </motion.div>
-        
+
         {/* Badges - Fixed Position */}
         {product.limited && (
           <motion.div
@@ -757,7 +753,7 @@ function ProductCard({ product, index, onAdd }: { product: Product, index: numbe
           <div className="mt-1 text-xs text-gray-600 font-inter">Only 12 left</div>
         )}
         <div className="mt-2 font-semibold text-base md:text-lg font-inter">₹{product.price}</div>
-        
+
         {/* Footer - Always at Bottom */}
         <div className="mt-auto pt-3 flex flex-col gap-2">
           <motion.button
@@ -936,21 +932,21 @@ function Footer({ onNav }: { onNav: (route: string) => void }) {
         <div>
           <div className="font-semibold mb-3 text-black uppercase font-inter">Customer Care</div>
           <div className="flex flex-col gap-2 font-inter">
-            <motion.button 
+            <motion.button
               whileHover={{ x: 4 }}
               className="text-left hover:text-black transition-colors"
               onClick={() => onNav('help')}
             >
               Help / FAQ
             </motion.button>
-            <motion.button 
+            <motion.button
               whileHover={{ x: 4 }}
               className="text-left hover:text-black transition-colors"
               onClick={() => onNav('track')}
             >
               Track Order
             </motion.button>
-            <motion.button 
+            <motion.button
               whileHover={{ x: 4 }}
               className="text-left hover:text-black transition-colors"
             >
@@ -961,20 +957,20 @@ function Footer({ onNav }: { onNav: (route: string) => void }) {
         <div>
           <div className="font-semibold mb-3 text-black uppercase font-inter">Company</div>
           <div className="flex flex-col gap-2 font-inter">
-            <motion.button 
+            <motion.button
               whileHover={{ x: 4 }}
               className="text-left hover:text-black transition-colors"
               onClick={() => onNav('about')}
             >
               About
             </motion.button>
-            <motion.button 
+            <motion.button
               whileHover={{ x: 4 }}
               className="text-left hover:text-black transition-colors"
             >
               Contact
             </motion.button>
-            <motion.button 
+            <motion.button
               whileHover={{ x: 4 }}
               className="text-left hover:text-black transition-colors"
             >
@@ -985,19 +981,19 @@ function Footer({ onNav }: { onNav: (route: string) => void }) {
         <div>
           <div className="font-semibold mb-3 text-black uppercase font-inter">Legal</div>
           <div className="flex flex-col gap-2 font-inter">
-            <motion.button 
+            <motion.button
               whileHover={{ x: 4 }}
               className="text-left hover:text-black transition-colors"
             >
               Privacy
             </motion.button>
-            <motion.button 
+            <motion.button
               whileHover={{ x: 4 }}
               className="text-left hover:text-black transition-colors"
             >
               Terms
             </motion.button>
-            <motion.button 
+            <motion.button
               whileHover={{ x: 4 }}
               className="text-left hover:text-black transition-colors"
             >
@@ -1030,7 +1026,7 @@ export default function HomePage() {
   }, [toast]);
 
   // Scroll to top on route change
-  useEffect(() => { window.scrollTo(0,0); }, [route]);
+  useEffect(() => { window.scrollTo(0, 0); }, [route]);
 
   const addToCart = useCallback((p: Product) => { setCart((prev: Product[]) => [...prev, p]); setToast('Product added to cart'); }, [setCart]);
   const handleBuyNow = useCallback(() => { setToast('Demo: Redirecting to shop'); setRoute('shop'); }, []);
@@ -1038,7 +1034,7 @@ export default function HomePage() {
   // Auth modal state and logic
   const [showAuth, setShowAuth] = useState(false);
   const [authEmail, setAuthEmail] = useState('');
-  
+
   const openAuth = useCallback(() => setShowAuth(true), []);
 
   // Lock body scroll when auth modal is open
@@ -1048,7 +1044,7 @@ export default function HomePage() {
       const scrollY = window.scrollY;
       // Apply styles to prevent scrolling
       document.body.style.position = 'fixed';
-      document.body.style.top = `- ${ scrollY } px`;
+      document.body.style.top = `-${scrollY}px`;
       document.body.style.width = '100%';
       document.body.style.overflow = 'hidden';
 
@@ -1066,9 +1062,9 @@ export default function HomePage() {
   const signup = useCallback((email: string) => {
     if (!email) return setToast('Please enter an email address');
     if (users[email]) { setCurrentUserEmail(email); setShowAuth(false); setToast('Welcome back!'); return; }
-    
+
     // Simple mock signup logic
-    const code = `URB${ Math.random().toString(36).slice(2, 8).toUpperCase() } `;
+    const code = `URB${Math.random().toString(36).slice(2, 8).toUpperCase()} `;
     const newUser = { email, referralCode: code, balance: 0 };
     const updated = { ...users, [email]: newUser };
     setUsers(updated);
@@ -1105,24 +1101,24 @@ export default function HomePage() {
             {cart.map((item: Product, index: number) => (
               <div key={index} className="flex justify-between items-center border-b pb-2">
                 <div className="flex items-center gap-4">
-                    <SafeImage src={item.photo} alt={item.title} className="w-12 h-12 rounded" width={48} height={48} />
-                    <div>
-                        <div className="font-semibold">{item.title}</div>
-                        <div className="text-sm text-gray-500">Size: {item.size}</div>
-                    </div>
+                  <SafeImage src={item.photo} alt={item.title} className="w-12 h-12 rounded" width={48} height={48} />
+                  <div>
+                    <div className="font-semibold">{item.title}</div>
+                    <div className="text-sm text-gray-500">Size: {item.size}</div>
+                  </div>
                 </div>
                 <div className="font-semibold">₹{item.price}</div>
               </div>
             ))}
           </div>
           <div className="mt-6 flex justify-between items-center pt-4 border-t-2 border-black">
-              <div className="font-archivo text-xl">Total</div>
-              <div className="font-archivo text-xl">
-                ₹{cart.reduce((sum: number, item: Product) => sum + item.price, 0)}
-              </div>
+            <div className="font-archivo text-xl">Total</div>
+            <div className="font-archivo text-xl">
+              ₹{cart.reduce((sum: number, item: Product) => sum + item.price, 0)}
+            </div>
           </div>
           <button className="mt-8 w-full py-3 bg-black text-white rounded-md font-semibold hover:bg-gray-800 transition">
-              Proceed to Checkout
+            Proceed to Checkout
           </button>
         </>
       )}
@@ -1135,9 +1131,9 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen">
-      <Header 
-        onNav={setRoute} 
-        cartCount={cart.length} 
+      <Header
+        onNav={setRoute}
+        cartCount={cart.length}
         openAuth={openAuth}
         currentRoute={route}
         hasActiveOffers={hasActiveOffers}
@@ -1377,68 +1373,68 @@ export default function HomePage() {
               transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="max-w-7xl mx-auto px-4 py-12"
             >
-            {currentUser ? (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-                className="bg-white p-8 rounded-lg shadow-md max-w-lg"
-              >
-                <h3 className="font-archivo text-3xl uppercase border-b pb-3">Your Profile</h3>
-                <div className="mt-6 space-y-3 text-lg">
-                  <div><span className="font-semibold">Email:</span> {currentUser.email}</div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold">Referral Code:</span>
-                    <code className="bg-gray-100 px-2 py-1 rounded font-mono">{currentUser.referralCode}</code>
+              {currentUser ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  className="bg-white p-8 rounded-lg shadow-md max-w-lg"
+                >
+                  <h3 className="font-archivo text-3xl uppercase border-b pb-3">Your Profile</h3>
+                  <div className="mt-6 space-y-3 text-lg">
+                    <div><span className="font-semibold">Email:</span> {currentUser.email}</div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold">Referral Code:</span>
+                      <code className="bg-gray-100 px-2 py-1 rounded font-mono">{currentUser.referralCode}</code>
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => {
+                          navigator.clipboard.writeText(currentUser.referralCode);
+                          setToast('Referral code copied! 🎉');
+                          confetti({
+                            particleCount: 100,
+                            spread: 70,
+                            origin: { y: 0.6 },
+                            colors: ['#000000', '#F2E9DD', '#ffffff'],
+                          });
+                        }}
+                        className="px-3 py-1 bg-black text-white text-sm rounded hover:bg-gray-800 transition"
+                      >
+                        Copy
+                      </motion.button>
+                    </div>
+                    <div><span className="font-semibold">Account Balance:</span> ₹{currentUser.balance}</div>
+                  </div>
+                  <div className="mt-8">
                     <motion.button
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      onClick={() => {
-                        navigator.clipboard.writeText(currentUser.referralCode);
-                        setToast('Referral code copied! 🎉');
-                        confetti({
-                          particleCount: 100,
-                          spread: 70,
-                          origin: { y: 0.6 },
-                          colors: ['#000000', '#F2E9DD', '#ffffff'],
-                        });
-                      }}
-                      className="px-3 py-1 bg-black text-white text-sm rounded hover:bg-gray-800 transition"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={logout}
+                      className="px-5 py-2 border border-red-500 text-red-500 rounded-md hover:bg-red-50 transition hover:text-red-600"
                     >
-                      Copy
+                      Logout
                     </motion.button>
                   </div>
-                  <div><span className="font-semibold">Account Balance:</span> ₹{currentUser.balance}</div>
-                </div>
-                <div className="mt-8">
+                </motion.div>
+              ) : (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.4 }}
+                  className="max-w-lg mx-auto p-6 text-center"
+                >
+                  <p className="text-xl text-gray-600">Please sign in to view your profile.</p>
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    onClick={logout}
-                    className="px-5 py-2 border border-red-500 text-red-500 rounded-md hover:bg-red-50 transition hover:text-red-600"
+                    onClick={openAuth}
+                    className="mt-4 px-6 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition"
                   >
-                    Logout
+                    Sign In / Sign Up
                   </motion.button>
-                </div>
-              </motion.div>
-            ) : (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.4 }}
-                className="max-w-lg mx-auto p-6 text-center"
-              >
-                <p className="text-xl text-gray-600">Please sign in to view your profile.</p>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={openAuth}
-                  className="mt-4 px-6 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition"
-                >
-                  Sign In / Sign Up
-                </motion.button>
-              </motion.div>
-            )}
+                </motion.div>
+              )}
             </motion.div>
           )}
 
@@ -1479,16 +1475,16 @@ export default function HomePage() {
               <h3 className="font-archivo text-2xl border-b pb-2">Join URBNO</h3>
               <p className="text-sm text-gray-500 mt-2">Sign up or sign in using your email address.</p>
               <input
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 mt-5 focus:ring-2 focus:ring-black focus:border-black transition"
-                  placeholder="Email Address"
-                  type="email"
-                  value={authEmail}
-                  onChange={e => setAuthEmail(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      signup(authEmail);
-                    }
-                  }}
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 mt-5 focus:ring-2 focus:ring-black focus:border-black transition"
+                placeholder="Email Address"
+                type="email"
+                value={authEmail}
+                onChange={e => setAuthEmail(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    signup(authEmail);
+                  }
+                }}
               />
               <div className="mt-6 flex gap-3 justify-end">
                 <motion.button
