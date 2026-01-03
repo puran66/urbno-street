@@ -7,22 +7,27 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        // Premium editorial fonts
-        playfair: ['var(--font-playfair)', 'serif'], // Headlines
-        inter: ['var(--font-inter)', 'sans-serif'],  // Body & UI
-        satoshi: ['var(--font-satoshi)', 'sans-serif'], // Alternative UI font
+        // Premium Gen-Z Streetwear Typography
+        archivo: ['var(--font-archivo)', 'sans-serif'], // Bold Headlines
+        inter: ['var(--font-inter)', 'sans-serif'],     // Clean Body Text
       },
       colors: {
-        // Vogue-Hype Design System
-        'off-white': '#F9F9F9',      // Base background
-        'carbon': '#1A1A1A',          // Primary text & dark elements
-        'electric-blue': '#2563EB',   // Accent color for CTAs
-        'glass-white': 'rgba(249, 249, 249, 0.8)', // Glassmorphism
-        'glass-dark': 'rgba(26, 26, 26, 0.8)',     // Dark glass
+        // URBNO STREET Premium Palette
+        'charcoal': '#1A1A1A',           // Primary - Dark elements
+        'off-white': '#FAF9F7',          // Secondary - Light background
+        'light-beige': '#F2E9DD',        // Secondary - Beige tones
+        'electric-blue': '#2563EB',      // Accent - Bold premium accent
+        'muted-gold': '#D4AF37',         // Alternative accent option
+        'deep-olive': '#4A5D3F',         // Alternative accent option
 
-        // Legacy support (keeping for backward compatibility)
+        // Utility colors
+        'glass-white': 'rgba(250, 249, 247, 0.9)',
+        'glass-dark': 'rgba(26, 26, 26, 0.9)',
+
+        // Legacy support
         'urbno-beige': 'rgba(242,233,221,0.95)',
         'urbno-accent': '#F2E9DD',
+        'carbon': '#1A1A1A',
       },
       backdropBlur: {
         'glass': '12px',
