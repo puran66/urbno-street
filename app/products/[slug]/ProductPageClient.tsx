@@ -2,12 +2,15 @@
 
 import React, { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
 import ProductCarousel from '../../components/ProductCarousel';
 import ProductDetails, { ProductDetailsData } from '../../components/ProductDetails';
 import StickyBuyBar from '../../components/StickyBuyBar';
 import ReviewsSummary, { ReviewsData } from '../../components/ReviewsSummary';
 import RelatedProducts, { RelatedProduct } from '../../components/RelatedProducts';
 import WriteReviewModal from '../../components/WriteReviewModal';
+import ComingSoonModal from '../../components/ComingSoonModal';
 
 interface ProductPageClientProps {
   product: ProductDetailsData;
@@ -38,6 +41,7 @@ export default function ProductPageClient({
   });
   const [quantity, setQuantity] = useState(1);
   const [showReviewModal, setShowReviewModal] = useState(false);
+  const [showComingSoon, setShowComingSoon] = useState(false);
   const [toast, setToast] = useState('');
 
   // Calculate current price based on selected variants
@@ -74,44 +78,12 @@ export default function ProductPageClient({
     });
   }, [product.variants, selectedVariants]);
 
-  // Handle add to cart
+  // Handle add to cart - Show Coming Soon modal
   const handleAddToCart = useCallback(
     async (variantSelections: Record<string, string>, qty: number) => {
-      try {
-        // In production, call your API
-        const cartItem = {
-          productId: product.id,
-          variantSelections,
-          quantity: qty,
-          price: currentPrice,
-        };
-
-        // Save to localStorage (or call API)
-        const existingCart = JSON.parse(localStorage.getItem('urbno_cart') || '[]');
-        existingCart.push(cartItem);
-        localStorage.setItem('urbno_cart', JSON.stringify(existingCart));
-
-        setToast('Product added to cart!');
-        setTimeout(() => setToast(''), 3000);
-
-        // Analytics
-        if (typeof window !== 'undefined' && (window as any).dataLayer) {
-          (window as any).dataLayer.push({
-            event: 'add_to_cart',
-            product_id: product.id,
-            product_title: product.title,
-            price: currentPrice,
-            quantity: qty,
-            variant_selections: variantSelections,
-          });
-        }
-      } catch (error) {
-        console.error('Error adding to cart:', error);
-        setToast('Failed to add to cart. Please try again.');
-        setTimeout(() => setToast(''), 3000);
-      }
+      setShowComingSoon(true);
     },
-    [product.id, product.title, currentPrice]
+    []
   );
 
   // Handle variant change
@@ -122,23 +94,11 @@ export default function ProductPageClient({
   // Handle review submission
   const handleReviewSubmit = useCallback(
     (review: { rating: number; title: string; comment: string }) => {
-      // In production, call your API
-      console.log('Review submitted:', review);
-
-      // Analytics
-      if (typeof window !== 'undefined' && (window as any).dataLayer) {
-        (window as any).dataLayer.push({
-          event: 'review_submitted',
-          product_id: product.id,
-          rating: review.rating,
-        });
-      }
-
       setToast('Thank you for your review!');
       setTimeout(() => setToast(''), 3000);
       setShowReviewModal(false);
     },
-    [product.id]
+    []
   );
 
   // Handle related product click
@@ -151,17 +111,44 @@ export default function ProductPageClient({
 
   // Handle related product add to cart
   const handleRelatedAddToCart = useCallback((productId: string) => {
-    // In production, call your API
-    const existingCart = JSON.parse(localStorage.getItem('urbno_cart') || '[]');
-    existingCart.push({ productId, quantity: 1 });
-    localStorage.setItem('urbno_cart', JSON.stringify(existingCart));
-
-    setToast('Product added to cart!');
-    setTimeout(() => setToast(''), 3000);
+    setShowComingSoon(true);
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#FAF9F7]">
+    <div className="min-h-screen bg-off-white">
+      {/* Header */}
+      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
+        {/* Main Header */}
+        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+          <Link href="/" className="font-archivo text-2xl uppercase tracking-tight hover:text-electric-blue transition-colors">
+            URBNO SHOP
+          </Link>
+
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex gap-8 items-center">
+            <Link href="/shop" className="font-inter text-sm uppercase tracking-wider hover:text-electric-blue transition-colors">
+              Shop
+            </Link>
+            <Link href="/about" className="font-inter text-sm uppercase tracking-wider hover:text-electric-blue transition-colors">
+              About
+            </Link>
+          </nav>
+
+          {/* Actions */}
+          <div className="flex items-center gap-3">
+            <Link href="/cart">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-4 py-2 border-2 border-charcoal rounded-lg flex items-center gap-2 hover:bg-charcoal hover:text-white transition-colors font-inter text-sm font-semibold uppercase tracking-wider"
+              >
+                Cart (0)
+              </motion.button>
+            </Link>
+          </div>
+        </div>
+      </header>
+
       <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
         {/* Back Button */}
         <button
@@ -256,6 +243,55 @@ export default function ProductPageClient({
           {toast}
         </div>
       )}
+
+      {/* Footer */}
+      <footer className="bg-off-white border-t border-gray-200 py-12 mt-16">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+            <div className="col-span-2 md:col-span-1">
+              <div className="font-archivo text-xl mb-3 uppercase">URBNO SHOP</div>
+              <p className="text-sm text-gray-600 font-inter">
+                Modern streetwear for the new generation. Limited drops, premium quality.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-3 uppercase text-sm font-inter">Shop</h3>
+              <div className="space-y-2 text-sm text-gray-600 font-inter">
+                <Link href="/shop" className="block hover:text-charcoal transition-colors">All Products</Link>
+                <button onClick={() => setShowComingSoon(true)} className="block hover:text-charcoal transition-colors">New Arrivals</button>
+                <button onClick={() => setShowComingSoon(true)} className="block hover:text-charcoal transition-colors">Best Sellers</button>
+              </div>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-3 uppercase text-sm font-inter">About</h3>
+              <div className="space-y-2 text-sm text-gray-600 font-inter">
+                <Link href="/about" className="block hover:text-charcoal transition-colors">Our Story</Link>
+                <button onClick={() => setShowComingSoon(true)} className="block hover:text-charcoal transition-colors">Contact</button>
+                <button onClick={() => setShowComingSoon(true)} className="block hover:text-charcoal transition-colors">FAQ</button>
+              </div>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-3 uppercase text-sm font-inter">Follow</h3>
+              <div className="space-y-2 text-sm text-gray-600 font-inter">
+                <a href="https://www.instagram.com/urbno.in?igsh=ODFobGF6dGM3MXU1&utm_source=qr" target="_blank" rel="noopener noreferrer" className="block hover:text-charcoal transition-colors">Instagram</a>
+                <button onClick={() => setShowComingSoon(true)} className="block hover:text-charcoal transition-colors">Twitter</button>
+                <button onClick={() => setShowComingSoon(true)} className="block hover:text-charcoal transition-colors">TikTok</button>
+              </div>
+            </div>
+          </div>
+          <div className="border-t border-gray-200 pt-8 text-center text-sm text-gray-500 font-inter">
+            © 2026 URBNO SHOP. All rights reserved.
+          </div>
+        </div>
+      </footer>
+
+      {/* Coming Soon Modal */}
+      <ComingSoonModal
+        isOpen={showComingSoon}
+        onClose={() => setShowComingSoon(false)}
+        title="Cart Coming Soon"
+        message="We're crafting something special. Shopping cart will be available at launch."
+      />
     </div>
   );
 }
