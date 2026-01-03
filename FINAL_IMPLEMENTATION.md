@@ -10,8 +10,7 @@ Your **premium, conversion-optimized fashion e-commerce platform** is **100% COM
 
 ### **Live URL:** http://localhost:3000/vogue
 
-**Dev server is running** - Just open your browser!
-
+**Dev server is running** - Just open your browser! 
 ---
 
 ## 📦 COMPLETE FEATURE LIST (ALL IMPLEMENTED)
