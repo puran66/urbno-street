@@ -20,13 +20,13 @@ const nextConfig = {
 
   // Production optimizations
   swcMinify: true,
-  
+
   // React strict mode
   reactStrictMode: true,
 
   // Performance optimizations
   poweredByHeader: false,
-  
+
   // Experimental features for better performance
   experimental: {
     optimizeCss: true,
